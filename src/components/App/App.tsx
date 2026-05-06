@@ -12,8 +12,8 @@ import './App.module.css';
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false); // Змінено на boolean згідно з вимогами
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); // Стан для модалки
+  const [error, setError] = useState<boolean>(false);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   const handleSearch = async (query: string) => {
     try {
@@ -23,7 +23,6 @@ function App() {
 
       const data = await fetchMovies(query);
 
-      // Вимоги ментора: toast-сповіщення при відсутності результатів
       if (data.length === 0) {
         toast.error('Фільмів не знайдено за вашим запитом');
         return;
@@ -38,7 +37,6 @@ function App() {
     }
   };
 
-  // Вимоги ментора: обробник, що оновлює стан, а не просто логує
   const openModal = (movie: Movie) => {
     setSelectedMovie(movie);
   };
@@ -52,22 +50,17 @@ function App() {
       <Toaster position="top-right" />
       <SearchBar onSubmit={handleSearch} />
 
-      {/* Вимоги ментора: використання ErrorMessage замість <p> */}
       {error && <ErrorMessage />}
-
-      {/* Вимоги ментора: використання Loader замість порожнього <p> */}
       {isLoading && <Loader />}
 
       {!isLoading && movies.length > 0 && (
         <MovieGrid movies={movies} onSelect={openModal} />
       )}
 
-      {/* Вимоги ментора: рендеринг MovieModal */}
-      <MovieModal
-        isOpen={Boolean(selectedMovie)}
-        movie={selectedMovie}
-        onClose={closeModal}
-      />
+      { }
+      {selectedMovie && (
+        <MovieModal movie={selectedMovie} onClose={closeModal} />
+      )}
     </div>
   );
 }
