@@ -1,48 +1,65 @@
-import Modal from 'react-modal';
-// 1. Виправлено імпорт типу
-import type { Movie } from '../../types/movie';
-
-Modal.setAppElement('#root');
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
+import type { Movie } from "../../types/movie";
+import css from "./MovieModal.module.css";
 
 interface MovieModalProps {
-  isOpen: boolean;
-  movie: Movie | null;
+  movie: Movie;
   onClose: () => void;
 }
 
-const MovieModal = ({ isOpen, movie, onClose }: MovieModalProps) => {
-  if (!movie) return null;
+const modalRoot = document.getElementById("modal-root") as HTMLElement;
 
-  return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      style={{
-        overlay: { backgroundColor: 'rgba(0, 0, 0, 0.8)', zIndex: 1200 },
-        content: {
-          top: '50%', left: '50%', right: 'auto', bottom: 'auto',
-          transform: 'translate(-50%, -50%)', padding: '0', border: 'none',
-        },
-      }}
-    >
-      <div>
-        {/* 2. Використовуємо властивості, які точно є у вашому типі Movie */}
-        {/* Якщо картинка не poster, спробуйте movie.poster_path або movie.image */}
+export default function MovieModal({ movie, onClose }: MovieModalProps) {
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleEsc);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "auto";
+    };
+  }, [onClose]);
+
+  const handleBackdrop = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  return createPortal(
+    <div className={css.backdrop} onClick={handleBackdrop}>
+      <div className={css.modal}>
+        <button className={css.closeButton} onClick={onClose}>
+          &times;
+        </button>
+
         <img
-          src={(movie as any).poster || (movie as any).poster_path || (movie as any).urls?.regular}
-          alt={(movie as any).title}
-          style={{ maxWidth: '100%', maxHeight: '80vh', display: 'block' }}
+          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+          alt={movie.title}
+          className={css.image}
         />
-        <div style={{ padding: '15px', backgroundColor: 'white' }}>
-          <h2>{(movie as any).title}</h2>
-          <p>{(movie as any).overview || (movie as any).description || "No description"}</p>
-          <button onClick={onClose}>Close</button>
+
+        <div className={css.content}>
+          <h2>{movie.title}</h2>
+          <p>{movie.overview}</p>
+
+          <p>
+            <strong>Release Date:</strong> {movie.release_date}
+          </p>
+
+          <p>
+            <strong>Rating:</strong> {movie.vote_average}/10
+          </p>
         </div>
       </div>
-    </Modal>
+    </div>,
+    modalRoot
   );
-};
-
-export default MovieModal;
+}
 
 
