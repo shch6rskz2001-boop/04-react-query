@@ -7,7 +7,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import MovieModal from '../MovieModal/MovieModal';
 import { fetchMovies } from '../../services/movieService';
 import type { Movie } from '../../types/movie';
-import './App.module.css';
+import css from'./App.module.css';
 
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -46,7 +46,7 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className={css.app} >
       <Toaster position="top-right" />
       <SearchBar onSubmit={handleSearch} />
 

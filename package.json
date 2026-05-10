@@ -1,5 +1,5 @@
 {
-  "name": "03-react-movi",
+  "name": "04-react-query",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -17,6 +17,7 @@
     "react-modal": "^3.16.3"
   },
   "devDependencies": {
+    "react-hot-toast": "^2.6.0",
     "@babel/core": "^7.29.0",
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
