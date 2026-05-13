@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+
 
 import toast, { Toaster } from 'react-hot-toast';
 import ReactPaginate from 'react-paginate';
@@ -22,9 +23,10 @@ function App() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['movies', searchQuery, page],
     queryFn: () => fetchMovies(searchQuery, page),
-    enabled: searchQuery !== '',
-    placeholderData: keepPreviousData, // <-- Вкажіть імпортовану функцію тут
+    enabled: searchQuery.trim() !== '',
+    placeholderData: (previousData) => previousData ?? { results: [], total_pages: 0 },
   });
+
 
 
   const handleSearch = (query: string) => {
