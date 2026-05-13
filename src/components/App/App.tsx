@@ -55,7 +55,7 @@ function App() {
         <MovieGrid movies={movies} onSelect={openModal} />
       )}
 
-      { }
+
       {totalPages > 1 && (
         <ReactPaginate
           pageCount={totalPages > 500 ? 500 : totalPages}
