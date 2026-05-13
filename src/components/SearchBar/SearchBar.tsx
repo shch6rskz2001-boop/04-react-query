@@ -1,4 +1,3 @@
-import React from "react";
 import { toast } from "react-hot-toast";
 import styles from "./SearchBar.module.css";
 
@@ -7,19 +6,18 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ onSubmit }: SearchBarProps) {
-  // Змінюємо тип аргументу на стандартну подію форми React
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Зупиняємо перезавантаження сторінки браузером
-
-    // Зчитуємо дані з елементів форми за допомогою FormData
-    const formData = new FormData(e.currentTarget);
+  // Функція для Form Actions тепер приймає СУТО об'єкт FormData
+  const handleSubmit = (formData: FormData) => {
+    // Отримуємо значення інпуту за його атрибутом name="query"
     const query = formData.get("query") as string;
 
+    // Перевірка на порожній запит
     if (!query || !query.trim()) {
       toast.error("Please enter your search query.");
       return;
     }
 
+    // Передаємо валідний запит у батьківський компонент
     onSubmit(query);
   };
 
@@ -28,15 +26,15 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
       <div className={styles.container}>
         <a
           className={styles.link}
-          href="https://www.themoviedb.org/"
+          href="themoviedb.org"
           target="_blank"
           rel="noopener noreferrer"
         >
           Powered by TMDB
         </a>
 
-        {/* МІНЯЄМО action={handleSubmit} НА ОБОВ'ЯЗКОВИЙ onSubmit={handleSubmit} */}
-        <form onSubmit={handleSubmit} className={styles.form}>
+        {/* ВИМОГА МЕНТОРА: Використовуємо атрибут action з функцією */}
+        <form action={handleSubmit} className={styles.form}>
           <input
             className={styles.input}
             name="query"
@@ -50,3 +48,4 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
     </header>
   );
 }
+
