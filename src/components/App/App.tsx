@@ -19,13 +19,14 @@ function App() {
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
- 
-  const { data, isLoading, isError, isSuccess } = useQuery({
+  // Додано isFetching для точного контролю стану завантаження
+  const { data, isLoading, isError, isSuccess, isFetching } = useQuery({
     queryKey: ['movies', searchQuery, page],
     queryFn: () => fetchMovies(searchQuery, page),
     enabled: searchQuery.trim() !== '',
     placeholderData: (previousData) => previousData ?? { results: [], total_pages: 0 },
   });
+
 
   const handleSearch = (query: string) => {
     if (query.trim() === '') {
@@ -43,11 +44,13 @@ function App() {
   const totalPages = data?.total_pages || 0;
 
  
+   // Вимога ментора: toast-сповіщення, якщо фільмів не знайдено
   useEffect(() => {
-    if (searchQuery.trim() !== '' && isSuccess && movies.length === 0) {
+    if (searchQuery.trim() !== '' && isSuccess && !isFetching && movies.length === 0) {
       toast.error('No movies found for your request.');
     }
-  }, [isSuccess, movies.length, searchQuery]);
+  }, [isSuccess, isFetching, movies.length, searchQuery]);
+
 
 
   return (
