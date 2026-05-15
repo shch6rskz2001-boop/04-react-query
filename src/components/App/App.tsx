@@ -19,7 +19,7 @@ function App() {
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  // Додано isSuccess для відстеження успішного завершення запиту
+ 
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['movies', searchQuery, page],
     queryFn: () => fetchMovies(searchQuery, page),
@@ -42,12 +42,13 @@ function App() {
   const movies = data?.results || [];
   const totalPages = data?.total_pages || 0;
 
-  // Вимога ментора: toast-сповіщення, якщо фільмів не знайдено
+ 
   useEffect(() => {
-    if (isSuccess && movies.length === 0) {
+    if (searchQuery.trim() !== '' && isSuccess && movies.length === 0) {
       toast.error('No movies found for your request.');
     }
-  }, [isSuccess, movies.length]);
+  }, [isSuccess, movies.length, searchQuery]);
+
 
   return (
     <div className={css.app}>
