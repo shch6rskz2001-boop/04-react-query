@@ -23,13 +23,14 @@ export default function MovieGrid({ movies, onSelect }: MovieGridProps) {
             <div className={css.card} onClick={() => onSelect(movie)}>
               { }
               <img
-                className={css.image}
-                src={movie.poster_path
-                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                  : 'placeholder.com'
-                }
-                alt={movie.title || "Movie poster"}
-              />
+                 className={css.image}
+                 src={movie.poster_path
+                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                 : 'https://placeholder.com'
+                 }
+                  alt={movie.title || "Movie poster"}
+                  />
+
               <h2 className={css.title}>{movie.title || "Untitled"}</h2>
             </div>
           </li>
